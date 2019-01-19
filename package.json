@@ -52,6 +52,6 @@
     "protodef": "^1.6.7",
     "readable-stream": "^3.0.0",
     "uuid-1345": "^0.99.6",
-    "yggdrasil": "^1.1.1"
+    "yggdrasil": "github:Harry5573/node-yggdrasil"
   }
 }

@@ -1,10 +1,11 @@
 'use strict'
 
 const crypto = require('crypto')
-const yggserver = require('yggdrasil').server({})
+const yggdrasil = require('yggdrasil')
 const debug = require('debug')('minecraft-protocol')
 
 module.exports = function (client, options) {
+  const yggserver = yggdrasil.server({proxy: options.proxy})
   client.once('encryption_begin', onEncryptionKeyRequest)
 
   function onEncryptionKeyRequest (packet) {

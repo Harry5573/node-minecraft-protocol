@@ -1,7 +1,8 @@
-const yggdrasil = require('yggdrasil')({})
+const yggdrasil = require('yggdrasil')
 const UUID = require('uuid-1345')
 
 module.exports = function (client, options) {
+  const yggclient = yggdrasil({proxy: options.proxy})
   const clientToken = options.clientToken || (options.session && options.session.clientToken) || UUID.v4().toString()
   options.accessToken = null
   options.haveCredentials = options.password != null || (clientToken != null && options.session != null)
@@ -21,13 +22,13 @@ module.exports = function (client, options) {
     }
 
     if (options.session) {
-      yggdrasil.validate(options.session.accessToken, function (err) {
+      yggclient.validate(options.session.accessToken, function (err) {
         if (!err) { cb(null, options.session) } else {
-          yggdrasil.refresh(options.session.accessToken, options.session.clientToken, function (err, accessToken, data) {
+          yggclient.refresh(options.session.accessToken, options.session.clientToken, function (err, accessToken, data) {
             if (!err) {
               cb(null, data)
             } else if (options.username && options.password) {
-              yggdrasil.auth({
+              yggclient.auth({
                 user: options.username,
                 pass: options.password,
                 token: clientToken
@@ -39,7 +40,7 @@ module.exports = function (client, options) {
         }
       })
     } else {
-      yggdrasil.auth({
+      yggclient.auth({
         user: options.username,
         pass: options.password,
         token: clientToken
